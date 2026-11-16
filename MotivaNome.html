@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102a43">
+<title>MotivaNome | Mensagens de Motivação</title>
+<style>
+:root{--bg:#f2f6fc;--ink:#172b4d;--muted:#62748a;--blue:#1769aa;--gold:#f4b942}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#eaf2ff,#f8faff 55%,#fff4dc);color:var(--ink);display:grid;place-items:center;padding:22px}
+.app{width:min(100%,680px);background:#fff;border-radius:24px;box-shadow:0 18px 55px #16324f20;overflow:hidden}
+header{background:linear-gradient(120deg,#102a43,#1769aa);color:white;padding:30px 28px;text-align:center}
+.logo{font-size:34px;margin-bottom:8px}
+h1{margin:0;font-size:clamp(25px,5vw,34px)}
+header p{margin:10px 0 0;color:#dcecff;line-height:1.5}
+main{padding:28px}
+label{display:block;font-weight:700;margin:0 0 8px}
+input,select{width:100%;padding:14px 15px;border:1.5px solid #d6e0ed;border-radius:12px;font-size:16px;color:var(--ink);background:#fff;outline:none}
+input:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1769aa18}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+button{border:0;border-radius:12px;padding:14px 18px;font-weight:700;font-size:15px;cursor:pointer;transition:.2s}
+button:hover{transform:translateY(-1px);filter:brightness(1.04)}
+.primary{background:var(--blue);color:white;width:100%;box-shadow:0 7px 18px #1769aa30}
+.result{display:none;margin-top:24px;padding:25px;border-radius:18px;background:linear-gradient(145deg,#f2f7ff,#fff9e9);border:1px solid #e4ebf5;text-align:center}
+.result small{color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
+#message{font-family:Georgia,serif;font-size:clamp(19px,3.5vw,24px);line-height:1.65;margin:18px 0;color:#243b53;white-space:pre-wrap}
+.signature{color:#9a6b12;font-weight:700}
+.actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.actions button{flex:1;min-width:130px}
+.copy{background:#e5eef8;color:#16466d}
+.whatsapp{background:#168b55;color:white}
+.again{background:#fff0c9;color:#79520a}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:0 20px 22px}
+@media(max-width:520px){.fields{grid-template-columns:1fr}main{padding:22px}.actions{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo">✨</div>
+  <h1>MotivaNome</h1>
+  <p>Transforme um nome numa mensagem especial de força, esperança e motivação.</p>
+</header>
+<main>
+  <div class="fields">
+    <div>
+      <label for="name">Nome da pessoa</label>
+      <input id="name" type="text" placeholder="Ex.: Adelino" maxlength="40" autocomplete="name">
+    </div>
+    <div>
+      <label for="style">Tipo de motivação</label>
+      <select id="style">
+        <option value="geral">Motivação geral</option>
+        <option value="sucesso">Sucesso e conquistas</option>
+        <option value="dificuldade">Força nos momentos difíceis</option>
+        <option value="estudo">Estudos e trabalho</option>
+        <option value="amor">Carinho e autoestima</option>
+        <option value="fe">Fé e esperança</option>
+      </select>
+    </div>
+  </div>
+  <button class="primary" id="generate">✦ Criar mensagem motivacional</button>
+  <section class="result" id="result" aria-live="polite">
+    <small>Uma mensagem para ti</small>
+    <div id="message"></div>
+    <div class="signature" id="signature"></div>
+    <div class="actions">
+      <button class="copy" id="copy">Copiar mensagem</button>
+      <button class="whatsapp" id="share">Enviar pelo WhatsApp</button>
+      <button class="again" id="again">Outra mensagem ↻</button>
+    </div>
+  </section>
+</main>
+<footer>MotivaNome • Mensagens positivas, criadas especialmente para cada pessoa.</footer>
+</div>
+<script>
+const frases = {
+geral:[
+"lembra-te de que cada novo dia é uma oportunidade para recomeçar. Não deixes que o medo seja maior do que os teus sonhos. Acredita em ti, mantém o foco e continua a caminhar. O teu esforço de hoje pode transformar o teu amanhã.",
+"tens dentro de ti mais força do que imaginas. Mesmo quando os resultados demoram, cada passo conta. Continua com coragem, paciência e determinação: a tua história ainda tem muitas páginas bonitas para escrever.",
+"não compares o teu caminho com o de ninguém. Cada pessoa tem o seu tempo e a sua batalha. Valoriza as tuas pequenas vitórias e nunca desistas de construir a vida que desejas."
+],
+sucesso:[
+"o sucesso não acontece por acaso: nasce da disciplina, da persistência e da coragem de tentar mais uma vez. Define os teus objetivos, trabalha em silêncio e deixa as tuas conquistas falarem por ti.",
+"grandes resultados começam com pequenas decisões. Mantém a visão, aprende com os erros e não abandones os teus sonhos por causa de obstáculos temporários. O teu potencial merece uma oportunidade."
+],
+dificuldade:[
+"sei que nem todos os dias são fáceis, mas este momento difícil não define o teu futuro. Respira, recupera as forças e avança um passo de cada vez. Não precisas resolver tudo hoje; só precisas não perder a esperança.",
+"as tempestades também passam. Sê paciente contigo, reconhece a tua coragem e lembra-te de tudo o que já conseguiste superar. Ainda há motivos para acreditar e razões para continuar."
+],
+estudo:[
+"o conhecimento que estás a construir hoje será uma ferramenta para o teu futuro. Estuda com dedicação, trabalha com responsabilidade e não tenhas medo de errar: cada tentativa ensina-te a chegar mais longe.",
+"o caminho pode exigir esforço, mas cada hora de dedicação aproxima-te dos teus objetivos. Organiza-te, mantém a disciplina e acredita na capacidade que tens de aprender e evoluir."
+],
+amor:[
+"nunca duvides do teu valor. Mereces respeito, paz, carinho e oportunidades para crescer. Cuida de ti, reconhece as tuas qualidades e não permitas que um dia difícil apague a luz que existe em ti.",
+"és uma pessoa única, com qualidades e possibilidades que merecem ser valorizadas. Trata-te com carinho, acredita no teu valor e nunca aceites menos do que respeito."
+],
+fe:[
+"mantém a fé e faz a tua parte com coragem. Mesmo quando não consegues ver o caminho completo, continua a dar passos com esperança. Que Deus renove as tuas forças e ilumine as tuas decisões.",
+"que a esperança seja maior do que as preocupações e que a fé te dê força para enfrentar cada desafio. Continua a lutar pelos teus sonhos, com humildade, confiança e gratidão."
+]};
+let currentText = "";
+function criar(){
+ const nome=document.getElementById('name').value.trim();
+ if(!nome){alert('Por favor, escreve o nome da pessoa.');document.getElementById('name').focus();return;}
+ const tipo=document.getElementById('style').value;
+ const lista=frases[tipo];
+ let frase=lista[Math.floor(Math.random()*lista.length)];
+ if(lista.length>1 && frase===currentText) frase=lista[(lista.indexOf(frase)+1)%lista.length];
+ currentText=frase;
+ const texto=`${nome}, ${frase}`;
+ document.getElementById('message').textContent=texto;
+ document.getElementById('signature').textContent='Acredita em ti. O melhor ainda pode estar por vir! ✨';
+ document.getElementById('result').style.display='block';
+}
+document.getElementById('generate').addEventListener('click',criar);
+document.getElementById('again').addEventListener('click',criar);
+document.getElementById('name').addEventListener('keydown',e=>{if(e.key==='Enter')criar()});
+document.getElementById('copy').addEventListener('click',async()=>{
+ const texto=currentText?document.getElementById('message').textContent+'\\n\\n'+document.getElementById('signature').textContent:'';
+ try{await navigator.clipboard.writeText(texto);document.getElementById('copy').textContent='Copiado! ✓';setTimeout(()=>document.getElementById('copy').textContent='Copiar mensagem',1600);}
+ catch(e){alert('Não foi possível copiar automaticamente. Seleciona o texto e copia manualmente.');}
+});
+document.getElementById('share').addEventListener('click',()=>{
+ const texto=document.getElementById('message').textContent+'\\n\\n'+document.getElementById('signature').textContent;
+ if(!currentText)return;
+ window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+});
+</script>
+</body>
+</html>
